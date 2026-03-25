@@ -134,6 +134,20 @@ def generate_password():
         # "misspell" a word to further increase security
         if _sec_level == 3:
             _char_list = _misspell(_char_list)
+
+        # Capitalize random letter to ensure it meets general required password parameters
+        random_capitalization = ""
+        while not random_capitalization:
+            random_capitalization = secrets.randbelow(len(_char_list))
+            if _char_list[random_capitalization] in seperators:
+                continue
+            if _char_list[random_capitalization] in special_char_replacement_map.values():
+                continue
+            if _char_list[random_capitalization] in int_replacement_map.values():
+                continue
+
+            _char_list[random_capitalization] = _char_list[random_capitalization].upper()
+
         # Concat the final password together
         password = "".join(_char_list)
 
