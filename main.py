@@ -1,5 +1,7 @@
+import json
 import secrets
 import string
+import urllib.request
 
 from copy import deepcopy
 
@@ -50,10 +52,20 @@ def generate_password():
 
     _sec_level = int(choice)
 
-    # TODO:  Fetch words from API
     def fetch_words():
         """"""
-        return ["ball", "Four", "test"]
+        _api_url = "https://random-word-api.herokuapp.com/word?number=3&length=6"
+        try:
+            with urllib.request.urlopen(_api_url) as response:
+                if response.getcode() != 200:
+                    raise Exception(f"Got an invalid response from API: {response.get_code()}")
+                resp_data = json.loads(response.read().decode("utf-8"))
+                print(f"here is data: {resp_data}")
+                response.close()
+        except urllib.error.URLError as e:
+            print(f"An error occurred: {e.reason}")
+            return None
+        return resp_data
 
     def _misspell(char_list):
         """
