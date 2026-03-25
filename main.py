@@ -140,10 +140,13 @@ def generate_password():
         while not random_capitalization:
             random_capitalization = secrets.randbelow(len(_char_list))
             if _char_list[random_capitalization] in seperators:
+                random_capitalization = ""
                 continue
             if _char_list[random_capitalization] in special_char_replacement_map.values():
+                random_capitalization = ""
                 continue
             if _char_list[random_capitalization] in int_replacement_map.values():
+                random_capitalization = ""
                 continue
 
             _char_list[random_capitalization] = _char_list[random_capitalization].upper()
