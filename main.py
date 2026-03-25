@@ -1,4 +1,5 @@
 import secrets
+import string
 
 from copy import deepcopy
 
@@ -22,7 +23,10 @@ special_char_replacement_map = {
     "n": "~",
     "t": "+"
 }
+
+
 def generate_password():
+    """"""
     print("Hello Password Generator!")
 
     # Get user input for security level 1-3
@@ -51,6 +55,37 @@ def generate_password():
         """"""
         return ["ball", "Four", "test"]
 
+    def _misspell(char_list):
+        """
+            Misspell a word to further increase security.  Replace a random character from the char_list with a random
+            letter.
+
+        :param list[str] char_list:
+        :return: List of characters where one letter has been randomly replaced with a different randomly chosen letter.
+        :rtype: list[str]
+        """
+        _valid_characters = string.ascii_lowercase
+        _misspell_list = deepcopy(char_list)
+        replacement_index = 0
+        while not replacement_index:
+            _replacement = secrets.randbelow(len(_misspell_list))
+            if _misspell_list[_replacement] not in _valid_characters:
+                continue
+
+            _replacement_instances = [idx for idx, val in enumerate(_misspell_list) if val == _misspell_list[_replacement]]
+            replacement_index = secrets.choice(_replacement_instances)
+
+        replacement_character = ""
+        while not replacement_character:
+            _replacement_character_candidate = secrets.choice(_valid_characters)
+            if _replacement_character_candidate == _misspell_list[replacement_index]:
+                continue
+            replacement_character = _replacement_character_candidate
+
+        _misspell_list[replacement_index] = replacement_character
+
+        return _misspell_list
+
     def _replace_char(char_list, replacement_map):
         """
             Choose a random character from char_list that has a valid replacement present in the replacement_map, and
@@ -75,8 +110,6 @@ def generate_password():
         _replacement_list[_replacement_index] = replacement_map[_replacement_char]
         return _replacement_list
 
-    # TODO:  Misspell one word in order to introduce security
-
     password = ""
     while not password:
         _sep = secrets.choice(seperators)
@@ -84,6 +117,8 @@ def generate_password():
         _words_raw = deepcopy([x.lower() for x in _words])
         _words_combined = _sep.join(_words_raw)
         _char_list = list(_words_combined)
+
+        # Replace random character w/ an integer
         _raw_pass = _replace_char(_char_list, int_replacement_map)
         if _raw_pass == _char_list:
             continue
@@ -96,6 +131,9 @@ def generate_password():
                 continue
             _char_list = _raw_lvl_2
 
+        # "misspell" a word to further increase security
+        if _sec_level == 3:
+            _char_list = _misspell(_char_list)
         # Concat the final password together
         password = "".join(_char_list)
 
