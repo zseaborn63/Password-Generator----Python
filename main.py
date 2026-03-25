@@ -52,7 +52,16 @@ def generate_password():
         return ["ball", "Four", "test"]
 
     def _replace_char(char_list, replacement_map):
-        """"""
+        """
+            Choose a random character from char_list that has a valid replacement present in the replacement_map, and
+            then replace a random instance of that character with the chosen replacement character.
+
+        :param list[str] char_list: List of characters to choose a replacement character from.
+        :param dict replacement_map: Dictionary of replacement characters and valid replacements.
+        :return: List of characters where one instance from the input char_list is replaced with a value from the input
+        replacement_map.
+        :rtype: list[str]
+        """
         _replacement_list = deepcopy(char_list)
         _replaceable = []
         for _char in _replacement_list:
@@ -65,9 +74,6 @@ def generate_password():
 
         _replacement_list[_replacement_index] = replacement_map[_replacement_char]
         return _replacement_list
-    # TODO:  Replace one letter w/ integer
-
-    # TODO:  Replace one letter w/ special character
 
     # TODO:  Misspell one word in order to introduce security
 
