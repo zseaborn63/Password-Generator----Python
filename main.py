@@ -12,6 +12,16 @@ int_replacement_map = {
     "s": "5",
     "g": "9"
 }
+
+special_char_replacement_map = {
+    "a": "@",
+    "l": "!",
+    "g": "&",
+    "s": "$",
+    "c": "<",
+    "n": "~",
+    "t": "+"
+}
 def generate_password():
     print("Hello Password Generator!")
 
@@ -72,7 +82,15 @@ def generate_password():
         if _raw_pass == _char_list:
             continue
         _char_list = _raw_pass
-    # TODO: Finally, concat words together
+
+        # Replace random character w/ a special character
+        if _sec_level >= 2:
+            _raw_lvl_2 = _replace_char(_char_list, special_char_replacement_map)
+            if _raw_lvl_2 == _char_list:
+                continue
+            _char_list = _raw_lvl_2
+
+        # Concat the final password together
         password = "".join(_char_list)
 
     return password
