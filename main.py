@@ -1,3 +1,17 @@
+import secrets
+
+from copy import deepcopy
+
+seperators = [" ", "_", "-"]
+
+int_replacement_map = {
+    "e": "3",
+    "b": "6",
+    "l": "1",
+    "o": "0",
+    "s": "5",
+    "g": "9"
+}
 def generate_password():
     print("Hello Password Generator!")
 
@@ -23,13 +37,47 @@ def generate_password():
     _sec_level = int(choice)
 
     # TODO:  Fetch words from API
+    def fetch_words():
+        """"""
+        return ["ball", "Four", "test"]
 
+    def _replace_char(char_list, replacement_map):
+        """"""
+        _replacement_list = deepcopy(char_list)
+        _replaceable = []
+        for _char in _replacement_list:
+            if _char in replacement_map.keys() and _char not in _replaceable:
+                _replaceable.append(_char)
+
+        _replacement_char = secrets.choice(_replaceable)
+        _replacement_instances = [idx for idx, val in enumerate(_replacement_list) if val == _replacement_char]
+        _replacement_index = secrets.choice(_replacement_instances)
+
+        _replacement_list[_replacement_index] = replacement_map[_replacement_char]
+        return _replacement_list
     # TODO:  Replace one letter w/ integer
 
     # TODO:  Replace one letter w/ special character
 
     # TODO:  Misspell one word in order to introduce security
 
+    password = ""
+    while not password:
+        _sep = secrets.choice(seperators)
+        _words = fetch_words()
+        _words_raw = deepcopy([x.lower() for x in _words])
+        _words_combined = _sep.join(_words_raw)
+        _char_list = list(_words_combined)
+        _raw_pass = _replace_char(_char_list, int_replacement_map)
+        if _raw_pass == _char_list:
+            continue
+        _char_list = _raw_pass
+    # TODO: Finally, concat words together
+        password = "".join(_char_list)
+
+    return password
+
 if __name__ == "__main__":
-    generate_password()
+    generated_password = generate_password()
+    print(f"Generated Password:\n\t{generated_password}")
     exit(0)
